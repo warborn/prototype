@@ -135,6 +135,10 @@ class Router {
 
         if(is_callable([$controller_object, $action])) {
           $controller_object->$action();
+          $view_path = ROOT.DS.'app'.DS.'views'.DS.str_replace('controller', '', strtolower($controller)).DS.$action.'.php';
+          $view_object = new View($view_path);
+          $content = $view_object->render();
+          echo $content;
         } else {
           throw new \Exception("Undefine action $action in $controller");
         }
