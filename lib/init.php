@@ -16,8 +16,11 @@ spl_autoload_register(function($class_name) {
   } elseif(file_exists($models_path)) {
     require_once($models_path);
   } else {
-    throw new \Exception("Failed to include class: ".$class_name);
+    // throw new \Exception("Failed to include class: ".$class_name);
   }
 });
+
+set_error_handler('Error::error_handler');
+set_exception_handler('Error::exception_handler');
 
 ?>

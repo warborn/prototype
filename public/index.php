@@ -5,10 +5,12 @@ define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__DIR__));
 
 require_once(ROOT.DS.'lib'.DS.'init.php');
+//
+// $post_controller = new PostsController();
+// $post_model = new Post();
 
-$post_controller = new PostsController();
-$post_model = new Post();
+// echo ROOT;
 
-echo ROOT;
+App::run($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']);
 
 ?>
