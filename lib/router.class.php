@@ -134,11 +134,14 @@ class Router {
         $action = $this->convert_to_snake_case($action);
 
         if(is_callable([$controller_object, $action])) {
-          $controller_object->$action();
+          $data = $controller_object->$action();
           $view_path = ROOT.DS.'app'.DS.'views'.DS.str_replace('controller', '', strtolower($controller)).DS.$action.'.php';
-          $view_object = new View($view_path);
+          $view_object = new View($view_path, $data);
           $content = $view_object->render();
-          echo $content;
+          
+          $layout_path = ROOT.DS.'app'.DS.'views'.DS.'layouts'.DS.$controller_object->get_layout().'.html';
+          $layout_object = new View($layout_path, array('yield' => $content));
+          echo $layout_object->render();
         } else {
           throw new \Exception("Undefine action $action in $controller");
         }

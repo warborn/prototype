@@ -1,6 +1,6 @@
 <?php
 
-class PagesController {
+class PagesController extends ActionController {
   public function index() {
     echo "hello from pages#index";
   }
