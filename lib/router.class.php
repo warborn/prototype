@@ -97,7 +97,7 @@ class Router {
             $match_params[$key] = $match;
           }
         }
-        $this->params = !empty($route['params']) ? $route['params'] : $match_params;
+        $this->params = array_merge($route['params'], $match_params);
         return true;
       }
     }
