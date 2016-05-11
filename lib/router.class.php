@@ -45,6 +45,14 @@ class Router {
    }
 
    /**
+    *
+    *
+    */
+    public function root($options = []) {
+      $this->add('', 'GET', $options);
+    }
+
+   /**
     * Add the routes for the eight standar actions unless only or except option are passed
     *
     * @param string $resource
@@ -138,7 +146,7 @@ class Router {
           $view_path = ROOT.DS.'app'.DS.'views'.DS.str_replace('controller', '', strtolower($controller)).DS.$action.'.php';
           $view_object = new View($view_path, $data);
           $content = $view_object->render();
-          
+
           $layout_path = ROOT.DS.'app'.DS.'views'.DS.'layouts'.DS.$controller_object->get_layout().'.html';
           $layout_object = new View($layout_path, array('yield' => $content));
           echo $layout_object->render();
