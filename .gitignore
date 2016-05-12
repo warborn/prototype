@@ -2,3 +2,5 @@ app/controllers/*
 app/models/*
 app/views/*
 config/*
+lib/active_record.class.php
+lib/mysql.class.php
