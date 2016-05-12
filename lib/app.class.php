@@ -7,6 +7,8 @@ class App {
   public static function run($url, $method) {
     self::$router = new Router();
     require_once(ROOT.DS.'config'.DS.'routes.php');
+    $db_adapter = Config::get('db.adapter');
+    self::$db = new $db_adapter(Config::get('db.host'),Config::get('db.user'), Config::get('db.password'), Config::get('db.db_name'));
     self::$router->dispatch($url, $method);
   }
 
