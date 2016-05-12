@@ -4,3 +4,5 @@ app/views/*
 config/*
 lib/active_record.class.php
 lib/mysql.class.php
+app/assets/*
+public/app.js

@@ -40,6 +40,12 @@ class ActionController {
     throw new \Exception(sprintf('require wasn\'t called or was called without arguments'));
   }
 
+  protected function redirect_to($action) {
+    $locations = ['index' => 'air-ballons'];
+    header('Location: ' . $locations[$action]);
+    exit();
+  }
+
 }
 
 ?>

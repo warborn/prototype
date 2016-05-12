@@ -60,7 +60,7 @@ class Router {
     * @return void
     */
    public function resources($resource, $options = []) {
-     $actions = ['index' => 'GET', 'show' => 'GET', 'new' => 'GET', 'create' => 'POST', 'edit' => 'GET', 'update' => 'PATCH', 'delete' => 'GET', 'destroy' => 'DELETE'];
+     $actions = ['index' => 'GET', 'add' => 'GET', 'show' => 'GET', 'create' => 'POST', 'edit' => 'GET', 'update' => 'PATCH', 'delete' => 'GET', 'destroy' => 'DELETE'];
 
      if(isset($options['only'])) {
        $actions = array_intersect($actions, $options['only']);
@@ -69,13 +69,14 @@ class Router {
      }
 
      foreach ($actions as $action => $method) {
-       if($action === 'index') {
+       if($action === 'add') {
+         $this->add($resource . '/add', $method, ['to' => $resource . '#' . $action]);
+       } else if($action === 'edit') {
+         $this->add($resource . '/{:id}/edit', $method, ['to' => $resource . '#' . $action]);
+       } else if(in_array($action, ['index', 'create'])) {
          $this->add($resource, $method, ['to' => $resource . '#' . $action]);
-         $this->add($resource . '/' . $action, $method, ['to' => $resource . '#' . $action]);
-       } else if(in_array($action, ['new', 'create'])) {
-         $this->add($resource . '/' . $action, $method, ['to' => $resource . '#' . $action]);
-       } else if(in_array($action, ['show', 'edit', 'update', 'delete', 'destroy'])) {
-         $this->add($resource . '/{:id}/' . $action, $method, ['to' => $resource . '#' . $action]);
+       } else if(in_array($action, ['show', 'update', 'destroy'])) {
+         $this->add($resource . '/{:id}', $method, ['to' => $resource . '#' . $action]);
        }
      }
    }
