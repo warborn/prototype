@@ -1,0 +1,4 @@
+app/controllers/*
+app/models/*
+app/views/*
+config/*
