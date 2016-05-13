@@ -9,8 +9,9 @@ require_once(ROOT.DS.'lib'.DS.'init.php');
 // $post_controller = new PostsController();
 // $post_model = new Post();
 
-// echo ROOT;
-
+if(isset($_POST['_method'])) {
+  $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);
+}
 App::run($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']);
 
 ?>

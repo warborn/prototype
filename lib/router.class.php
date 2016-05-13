@@ -35,7 +35,7 @@ class Router {
 
      // Add the start and end delimeters, and case insensitive finfo_set_flags
      $route = '/^' . $route . '$/i';
-
+     $method = strtoupper($method);
      $parms = [];
      if (isset($options["to"])) {
        $params = $this->get_parse_controller_action($options["to"]);

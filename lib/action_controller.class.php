@@ -42,7 +42,7 @@ class ActionController {
 
   protected function redirect_to($action) {
     $locations = ['index' => 'air-ballons'];
-    header('Location: ' . $locations[$action]);
+    header('Location: /' . $locations[$action]);
     exit();
   }
 
