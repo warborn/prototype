@@ -4,6 +4,10 @@ function camel_case_to_snake_case($input) {
   return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $input)), '_');
 }
 
+function render($partial) {
+  require_once(ROOT.DS.'app'.DS.'views'.DS.$partial.'.html');
+}
+
 spl_autoload_register(function($class_name) {
   // Get libraries paths
   $lib_path = ROOT.DS.'lib'.DS.camel_case_to_snake_case($class_name).'.class.php';
