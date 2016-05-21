@@ -4,8 +4,22 @@ function camel_case_to_snake_case($input) {
   return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $input)), '_');
 }
 
-function render($partial) {
-  require_once(ROOT.DS.'app'.DS.'views'.DS.$partial.'.html');
+function render($partial, $options = null) {
+  $allowed_extensions = ['html', 'php'];
+  $found = false;
+  $partial_path = ROOT.DS.'app'.DS.'views'.DS.$partial;
+  foreach ($allowed_extensions as $extension) {
+    if(file_exists($partial_path . ".{$extension}") && is_readable($partial_path. ".{$extension}")) {
+      $found = true;
+      if(isset($options['locals'])) {
+        extract($options['locals']);
+      }
+      require_once($partial_path. ".{$extension}");
+    }
+  }
+  if(! $found) {
+    throw new \Exception('Missing partial or partial with invalid extension ' . $partial_path);
+  }
 }
 
 function redirect_to($url) {
