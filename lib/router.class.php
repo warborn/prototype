@@ -148,8 +148,14 @@ class Router {
           $view_object = new View($view_path, $data);
           $content = $view_object->render();
 
-          $layout_path = ROOT.DS.'app'.DS.'views'.DS.'layouts'.DS.$controller_object->get_layout().'.html';
-          $layout_object = new View($layout_path, array('yield' => $content));
+          $layout_path = ROOT.DS.'app'.DS.'views'.DS.'layouts'.DS.$controller_object->get_layout();
+          if(file_exists($layout_path . '.html') && is_readable($layout_path . '.html')) {
+            $layout_object = new View($layout_path.'.html', array('yield' => $content));
+          } else if(file_exists($layout_path . '.php') && is_readable($layout_path . '.php')) {
+            $layout_object = new View($layout_path.'.php', array('yield' => $content));
+          } else {
+            throw new \Exception('Missing layout or layout with invalid extension ' . $layout_path);
+          }
           echo $layout_object->render();
         } else {
           throw new \Exception("Undefine action $action in $controller");
