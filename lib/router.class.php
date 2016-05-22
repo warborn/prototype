@@ -148,7 +148,7 @@ class Router {
             $controller_data = [];
           }
           $data = array_merge($controller_data, array('controller' => $controller, 'action' => $action));
-          $view_path = ROOT.DS.'app'.DS.'views'.DS.str_replace('controller', '', strtolower($controller)).DS.$action.'.php';
+          $view_path = ROOT.DS.'app'.DS.'views'.DS.str_replace('_controller', '', camel_case_to_snake_case($controller)).DS.$action.'.php';
           $view_object = new View($view_path, $data);
           $content = $view_object->render();
 
