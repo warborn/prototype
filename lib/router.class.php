@@ -143,7 +143,11 @@ class Router {
         $action = $this->convert_to_snake_case($action);
 
         if(is_callable([$controller_object, $action])) {
-          $data = array_merge($controller_object->$action(), array('controller' => $controller, 'action' => $action));
+          $controller_data = $controller_object->$action();
+          if($controller_data == null) {
+            $controller_data = [];
+          }
+          $data = array_merge($controller_data, array('controller' => $controller, 'action' => $action));
           $view_path = ROOT.DS.'app'.DS.'views'.DS.str_replace('controller', '', strtolower($controller)).DS.$action.'.php';
           $view_object = new View($view_path, $data);
           $content = $view_object->render();
