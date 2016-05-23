@@ -14,7 +14,7 @@ function render($partial, $options = null) {
       if(isset($options['locals'])) {
         extract($options['locals']);
       }
-      require_once($partial_path. ".{$extension}");
+      require($partial_path. ".{$extension}");
     }
   }
   if(! $found) {

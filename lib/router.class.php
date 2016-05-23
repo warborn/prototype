@@ -162,7 +162,7 @@ class Router {
           }
           echo $layout_object->render();
         } else {
-          throw new \Exception("Undefine action $action in $controller");
+          throw new \Exception("Undefined action $action in $controller");
         }
       } else {
         throw new \Exception("Undefined controller $controller");
