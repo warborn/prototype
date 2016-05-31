@@ -23,7 +23,8 @@ function render($partial, $options = null) {
 }
 
 function redirect_to($url) {
-  header('Location: /' . $url);
+  $base_url = Config::get('base_url');
+  header('Location: ' . $base_url . '/' . $url);
   exit();
 }
 

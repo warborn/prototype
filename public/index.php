@@ -5,9 +5,6 @@ define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__DIR__));
 
 require_once(ROOT.DS.'lib'.DS.'init.php');
-//
-// $post_controller = new PostsController();
-// $post_model = new Post();
 
 if(isset($_POST['_method'])) {
   $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);
