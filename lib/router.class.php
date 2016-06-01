@@ -143,6 +143,7 @@ class Router {
         $action = $this->convert_to_snake_case($action);
 
         if(is_callable([$controller_object, $action])) {
+          $this->import_helper($controller);
           $controller_data = $controller_object->$action();
           if($controller_data == null) {
             $controller_data = [];
@@ -230,6 +231,20 @@ class Router {
       return array('controller' => $parts[0], 'action' => $parts[1]);
     } else {
       throw new \Exception('Cannot parse $string into controller and action');
+    }
+  }
+
+  /**
+   * Imports the the corresponding helper based on the called controller
+   *
+   * @param string $controller
+   * @return array Contains the controller and action as an associative array
+   */
+  protected function import_helper($controller) {
+    $controller = str_replace('controller', 'helper', camel_case_to_snake_case($controller));
+    $helper_path = ROOT.DS.'app'.DS.'helpers'.DS.$controller . '.php';
+    if(file_exists($helper_path) && is_readable($helper_path)) {
+      require_once(ROOT.DS.'app'.DS.'helpers'.DS.$controller . '.php');
     }
   }
 
