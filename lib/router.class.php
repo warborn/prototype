@@ -144,6 +144,7 @@ class Router {
 
         if(is_callable([$controller_object, $action])) {
           $this->import_helper($controller);
+          $this->call_before_action_filters($controller_object);
           $controller_data = $controller_object->$action();
           if($controller_data == null) {
             $controller_data = [];
@@ -246,6 +247,13 @@ class Router {
     if(file_exists($helper_path) && is_readable($helper_path)) {
       require_once(ROOT.DS.'app'.DS.'helpers'.DS.$controller . '.php');
     }
+  }
+
+  protected function call_before_action_filters($controller) {
+    foreach($controller->before_action as $function) {
+      call_user_func_array(array($controller, $function), array());
+    }
+
   }
 
 }
