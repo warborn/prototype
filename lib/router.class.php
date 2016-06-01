@@ -257,18 +257,19 @@ class Router {
    * @return void
    */
   protected function call_before_action_filters($controller) {
-    foreach($controller->before_action as $function) {
-      if(method_exists($controller, $function)) {
-        if(is_callable([$controller, $function])) {
-          call_user_func_array(array($controller, $function), array());
+    if(isset($before_action) && is_array($before_action)) {
+      foreach($controller->before_action as $function) {
+        if(method_exists($controller, $function)) {
+          if(is_callable([$controller, $function])) {
+            call_user_func_array(array($controller, $function), array());
+          } else {
+            throw new \Exception('Cannot call ' . $function . ' on ' . get_class($controller) . ' object, must be a public method.');
+          }
         } else {
-          throw new \Exception('Cannot call ' . $function . ' on ' . get_class($controller) . ' object, must be a public method.');
+          throw new \Exception('There is no function named ' . $function . ' on ' . get_class($controller) . ' object.');
         }
-      } else {
-        throw new \Exception('There is no function named ' . $function . ' on ' . get_class($controller) . ' object.');
       }
     }
-
   }
 
 }
