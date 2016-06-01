@@ -143,6 +143,7 @@ class Router {
         $action = $this->convert_to_snake_case($action);
 
         if(is_callable([$controller_object, $action])) {
+          $this->import_helper('ApplicationController');
           $this->import_helper($controller);
           $this->call_before_action_filters($controller_object);
           $controller_data = $controller_object->$action();
@@ -238,8 +239,8 @@ class Router {
   /**
    * Imports the the corresponding helper based on the called controller
    *
-   * @param string $controller
-   * @return array Contains the controller and action as an associative array
+   * @param string $controller cammel case name
+   * @return void
    */
   protected function import_helper($controller) {
     $controller = str_replace('controller', 'helper', camel_case_to_snake_case($controller));
@@ -249,13 +250,22 @@ class Router {
     }
   }
 
+  /**
+   * Calls all the before action filters from the given controller
+   *
+   * @param string $controller cammel case name
+   * @return void
+   */
   protected function call_before_action_filters($controller) {
     foreach($controller->before_action as $function) {
       if(method_exists($controller, $function)) {
-
-        call_user_func_array(array($controller, $function), array());
+        if(is_callable([$controller, $function])) {
+          call_user_func_array(array($controller, $function), array());
+        } else {
+          throw new \Exception('Cannot call ' . $function . ' on ' . get_class($controller) . ' object, must be a public method.');
+        }
       } else {
-        throw new \Exception('There is no function named ' . $function . ' on ' . get_class($controller) . ' object');
+        throw new \Exception('There is no function named ' . $function . ' on ' . get_class($controller) . ' object.');
       }
     }
 
