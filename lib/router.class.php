@@ -251,7 +251,12 @@ class Router {
 
   protected function call_before_action_filters($controller) {
     foreach($controller->before_action as $function) {
-      call_user_func_array(array($controller, $function), array());
+      if(method_exists($controller, $function)) {
+
+        call_user_func_array(array($controller, $function), array());
+      } else {
+        throw new \Exception('There is no function named ' . $function . ' on ' . get_class($controller) . ' object');
+      }
     }
 
   }
