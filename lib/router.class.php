@@ -145,7 +145,7 @@ class Router {
         if(is_callable([$controller_object, $action])) {
           $this->import_helper('ApplicationController');
           $this->import_helper($controller);
-          $this->call_before_action_filters($controller_object);
+          $this->call_before_action_filters($controller_object, $action);
           $controller_data = $controller_object->$action();
           if($controller_data == null) {
             $controller_data = [];
@@ -256,19 +256,39 @@ class Router {
    * @param string $controller cammel case name
    * @return void
    */
-  protected function call_before_action_filters($controller) {
+  protected function call_before_action_filters($controller, $action) {
     if(isset($controller->before_action) && is_array($controller->before_action)) {
-      foreach($controller->before_action as $function) {
-        if(method_exists($controller, $function)) {
-          if(is_callable([$controller, $function])) {
-            call_user_func_array(array($controller, $function), array());
+      foreach($controller->before_action as $method_name => $options) {
+        if(is_array($options)) {
+          if(empty($options)) {
+            $this->call_object_method($controller, $method_name);
+          } else if(isset($options['only']) && is_array($options['only'])) {
+            if(in_array($action, $options['only'])) {
+              $this->call_object_method($controller, $method_name);
+            }
+          } else if(isset($options['except']) && is_array($options['except'])) {
+            if(!in_array($action, $options['except'])) {
+              $this->call_object_method($controller, $method_name);
+            }
           } else {
-            throw new \Exception('Cannot call ' . $function . ' on ' . get_class($controller) . ' object, must be a public method.');
+            throw new \Exception('Options provided must be an array');
           }
         } else {
-          throw new \Exception('There is no function named ' . $function . ' on ' . get_class($controller) . ' object.');
+          throw new \Exception('Value for each before action must be an associative array');
         }
       }
+    }
+  }
+
+  protected function call_object_method($object, $method) {
+    if(method_exists($object, $method)) {
+      if(is_callable([$object, $method])) {
+        call_user_func_array(array($object, $method), array());
+      } else {
+        throw new \Exception('Cannot call ' . $method . ' on ' . get_class($object) . ' object, must be a public method.');
+      }
+    } else {
+      throw new \Exception('There is no function named ' . $method . ' on ' . get_class($object) . ' object.');
     }
   }
 
