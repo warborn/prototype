@@ -257,7 +257,7 @@ class Router {
    * @return void
    */
   protected function call_before_action_filters($controller) {
-    if(isset($before_action) && is_array($before_action)) {
+    if(isset($controller->before_action) && is_array($controller->before_action)) {
       foreach($controller->before_action as $function) {
         if(method_exists($controller, $function)) {
           if(is_callable([$controller, $function])) {
